@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Utility functions for the engines &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Donate to searxng.org" href="../donate.html" />
+    <link rel="prev" title="Redis DB" href="searx.shared.redisdb.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../donate.html" title="Donate to searxng.org"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="searx.shared.redisdb.html" title="Redis DB"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Source-Code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Utility functions for the engines</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-searx.utils">
+<span id="utility-functions-for-the-engines"></span><span id="searx-utils"></span><h1>Utility functions for the engines<a class="headerlink" href="#module-searx.utils" title="Permalink to this heading">¶</a></h1>
+<p>Utility functions for the engines</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.convert_str_to_int">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">convert_str_to_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#convert_str_to_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.convert_str_to_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert number_str to int or 0 if number_str is not a number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.dict_subset">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">dict_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.MutableMapping" title="(in Python v3.11)"><span class="pre">MutableMapping</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.11)"><span class="pre">Set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#dict_subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.dict_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a subset of a dict</p>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dict_subset</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;c&#39;</span><span class="p">},</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">])</span>
+<span class="go">{&#39;A&#39;: &#39;a&#39;, &#39;C&#39;: &#39;c&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">&gt;&gt;</span> <span class="n">dict_subset</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="s1">&#39;c&#39;</span><span class="p">},</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+<span class="go">{&#39;A&#39;: &#39;a&#39;}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.ecma_unescape">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">ecma_unescape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#ecma_unescape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.ecma_unescape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python implementation of the unescape javascript function</p>
+<p><a class="reference external" href="https://www.ecma-international.org/ecma-262/6.0/#sec-unescape-string">https://www.ecma-international.org/ecma-262/6.0/#sec-unescape-string</a>
+<a class="reference external" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/unescape">https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/unescape</a></p>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ecma_unescape</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%u</span><span class="s1">5409&#39;</span><span class="p">)</span>
+<span class="go">&#39;吉&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecma_unescape</span><span class="p">(</span><span class="s1">&#39;%20&#39;</span><span class="p">)</span>
+<span class="go">&#39; &#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecma_unescape</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%F</span><span class="s1">3&#39;</span><span class="p">)</span>
+<span class="go">&#39;ó&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.eval_xpath">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">eval_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">XPath</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/utils.html#eval_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.eval_xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent of element.xpath(xpath_str) but compile xpath_str once for all.
+See <a class="reference external" href="https://lxml.de/xpathxslt.html#xpath-return-values">https://lxml.de/xpathxslt.html#xpath-return-values</a></p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>element (ElementBase): [description]</p></li>
+<li><p>xpath_spec (str|lxml.etree.XPath): XPath as a str or lxml.etree.XPath</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>result (bool, float, list, str): Results.</p></li>
+</ul>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>TypeError: Raise when xpath_spec is neither a str nor a lxml.etree.XPath</p></li>
+<li><p>SearxXPathSyntaxException: Raise when there is a syntax error in the XPath</p></li>
+<li><p>SearxEngineXPathException: Raise when the XPath can’t be evaluated.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.eval_xpath_getindex">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">eval_xpath_getindex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">elements:</span> <span class="pre">~lxml.etree.ElementBase,</span> <span class="pre">xpath_spec:</span> <span class="pre">~typing.Union[str,</span> <span class="pre">~lxml.etree.XPath],</span> <span class="pre">index:</span> <span class="pre">int,</span> <span class="pre">default=&lt;searx.utils._NotSetClass</span> <span class="pre">object&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/utils.html#eval_xpath_getindex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.eval_xpath_getindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call eval_xpath_list then get one element using the index parameter.
+If the index does not exist, either aise an exception is default is not set,
+other return the default value (can be None).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>elements (ElementBase): lxml element to apply the xpath.</p></li>
+<li><p>xpath_spec (str|lxml.etree.XPath): XPath as a str or lxml.etree.XPath.</p></li>
+<li><p>index (int): index to get</p></li>
+<li><p>default (Object, optional): Defaults if index doesn’t exist.</p></li>
+</ul>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>TypeError: Raise when xpath_spec is neither a str nor a lxml.etree.XPath</p></li>
+<li><p>SearxXPathSyntaxException: Raise when there is a syntax error in the XPath</p></li>
+<li><p>SearxEngineXPathException: if the index is not found. Also see eval_xpath.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>result (bool, float, list, str): Results.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.eval_xpath_list">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">eval_xpath_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">XPath</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/utils.html#eval_xpath_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.eval_xpath_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as eval_xpath, check if the result is a list</p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>element (ElementBase): [description]</p></li>
+<li><p>xpath_spec (str|lxml.etree.XPath): XPath as a str or lxml.etree.XPath</p></li>
+<li><p>min_len (int, optional): [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>TypeError: Raise when xpath_spec is neither a str nor a lxml.etree.XPath</p></li>
+<li><p>SearxXPathSyntaxException: Raise when there is a syntax error in the XPath</p></li>
+<li><p>SearxEngineXPathException: raise if the result is not a list</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>result (bool, float, list, str): Results.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.extract_text">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">extract_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpath_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_none</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/searx/utils.html#extract_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.extract_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract text from a lxml result</p>
+<ul class="simple">
+<li><p>if xpath_results is list, extract the text from each result and concat the list</p></li>
+<li><p>if xpath_results is a xml element, extract all the text node from it
+( text_content() method from lxml )</p></li>
+<li><p>if xpath_results is a string element, then it’s already done</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.extract_url">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">extract_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpath_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#extract_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.extract_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract and normalize URL from lxml Element</p>
+<dl>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>xpath_results (Union[List[html.HtmlElement], html.HtmlElement]): lxml Element(s)</p></li>
+<li><p>base_url (str): Base URL</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">search_url</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="k">return</span> <span class="n">searx</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">extract_url</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">search_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;&lt;span id=&quot;42&quot;&gt;https://example.com&lt;/span&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;http://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;http://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;//example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;http://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;http://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;//example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;/path?a=1&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/path?a=1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="go">raise lxml.etree.ParserError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">searx</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">extract_url</span><span class="p">([],</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="go">raise ValueError</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>ValueError</p></li>
+<li><p>lxml.etree.ParserError</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>str: normalized URL</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.gen_useragent">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">gen_useragent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">os_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#gen_useragent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.gen_useragent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a random browser User Agent</p>
+<p>See searx/data/useragents.json</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.get_engine_from_settings">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">get_engine_from_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#get_engine_from_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.get_engine_from_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return engine configuration from settings.yml of a given engine name</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.get_torrent_size">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">get_torrent_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filesize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filesize_multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/searx/utils.html#get_torrent_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.get_torrent_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>filesize (str): size</p></li>
+<li><p>filesize_multiplier (str): TB, GB, …. TiB, GiB…</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>int: number of bytes</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_torrent_size</span><span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;GB&#39;</span><span class="p">)</span>
+<span class="go">5368709120</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_torrent_size</span><span class="p">(</span><span class="s1">&#39;3.14&#39;</span><span class="p">,</span> <span class="s1">&#39;MiB&#39;</span><span class="p">)</span>
+<span class="go">3140000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.get_xpath">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">get_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpath_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">XPath</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">XPath</span></span></span><a class="reference internal" href="../_modules/searx/utils.html#get_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.get_xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return cached compiled XPath</p>
+<p>There is no thread lock.
+Worst case scenario, xpath_str is compiled more than one time.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>xpath_spec (str|lxml.etree.XPath): XPath as a str or lxml.etree.XPath</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>result (bool, float, list, str): Results.</p></li>
+</ul>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>TypeError: Raise when xpath_spec is neither a str nor a lxml.etree.XPath</p></li>
+<li><p>SearxXPathSyntaxException: Raise when there is a syntax error in the XPath</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.html_to_text">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">html_to_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#html_to_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.html_to_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract text from a HTML string</p>
+<dl>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>html_str (str): string HTML</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>str: extracted text</p></li>
+</ul>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">html_to_text</span><span class="p">(</span><span class="s1">&#39;Example &lt;span id=&quot;42&quot;&gt;#2&lt;/span&gt;&#39;</span><span class="p">)</span>
+<span class="go">&#39;Example #2&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">html_to_text</span><span class="p">(</span><span class="s1">&#39;&lt;style&gt;.span { color: red; }&lt;/style&gt;&lt;span&gt;Example&lt;/span&gt;&#39;</span><span class="p">)</span>
+<span class="go">&#39;Example&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.int_or_zero">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">int_or_zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#int_or_zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.int_or_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert num to int or 0. num can be either a str or a list.
+If num is a list, the first element is converted to int (or return 0 if the list is empty).
+If num is a str, see convert_str_to_int</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.is_valid_lang">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">is_valid_lang</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/searx/utils.html#is_valid_lang"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.is_valid_lang" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return language code and name if lang describe a language.</p>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_valid_lang</span><span class="p">(</span><span class="s1">&#39;zz&#39;</span><span class="p">)</span>
+<span class="go">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_valid_lang</span><span class="p">(</span><span class="s1">&#39;uk&#39;</span><span class="p">)</span>
+<span class="go">(True, &#39;uk&#39;, &#39;ukrainian&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_valid_lang</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;uk&#39;</span><span class="p">)</span>
+<span class="go">(True, &#39;uk&#39;, &#39;ukrainian&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_valid_lang</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">)</span>
+<span class="go">(True, &#39;en&#39;, &#39;english&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">searx</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">is_valid_lang</span><span class="p">(</span><span class="s1">&#39;Español&#39;</span><span class="p">)</span>
+<span class="go">(True, &#39;es&#39;, &#39;spanish&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">searx</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">is_valid_lang</span><span class="p">(</span><span class="s1">&#39;Spanish&#39;</span><span class="p">)</span>
+<span class="go">(True, &#39;es&#39;, &#39;spanish&#39;)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.match_language">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">match_language</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">locale_code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_aliases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'en-US'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/searx/utils.html#match_language"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.match_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the language code from lang_list that best matches locale_code</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.normalize_url">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">normalize_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#normalize_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.normalize_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize URL: add protocol, join URL with base_url, add trailing slash if there is no path</p>
+<dl>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>url (str): Relative URL</p></li>
+<li><p>base_url (str): Base URL, it must be an absolute URL.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">normalize_url</span><span class="p">(</span><span class="s1">&#39;https://example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;http://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalize_url</span><span class="p">(</span><span class="s1">&#39;//example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;http://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;http://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalize_url</span><span class="p">(</span><span class="s1">&#39;//example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com/&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalize_url</span><span class="p">(</span><span class="s1">&#39;/path?a=1&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/path?a=1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalize_url</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+<span class="go">&#39;https://example.com/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalize_url</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span> <span class="s1">&#39;/path&#39;</span><span class="p">)</span>
+<span class="go">raise ValueError</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>lxml.etree.ParserError</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>str: normalized URL</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.searx_useragent">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">searx_useragent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#searx_useragent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.searx_useragent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the searx User Agent</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.utils.to_string">
+<span class="sig-prename descclassname"><span class="pre">searx.utils.</span></span><span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/searx/utils.html#to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.utils.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert obj to its string representation.</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../own-instance.html">Why use a private instance?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Source-Code</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="searx.babel_extract.html">Custom message extractor (i18n)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.html">Load Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.demo_offline.html">Demo Offline Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.demo_online.html">Demo Online Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.google.html">Google Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.tineye.html">Tineye</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.yahoo.html">Yahoo Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.infopage.html">Online <code class="docutils literal notranslate"><span class="pre">/info</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.locales.html">Locales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.plugins.limiter.html">Limiter Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.plugins.tor_check.html">Tor check plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.redislib.html">Redis Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.search.html">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.shared.redisdb.html">Redis DB</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Utility functions for the engines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="../index.html">Overview</a>
+    <ul>
+      <li><a href="index.html">Source-Code</a>
+        <ul>
+          <li>Previous: <a href="searx.shared.redisdb.html" title="previous chapter">Redis DB</a>
+          <li>Next: <a href="../donate.html" title="next chapter">Donate to searxng.org</a></ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src/searx.utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

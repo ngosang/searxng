@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Locales &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Limiter Plugin" href="searx.plugins.limiter.html" />
+    <link rel="prev" title="Online /info" href="searx.infopage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="searx.plugins.limiter.html" title="Limiter Plugin"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="searx.infopage.html" title="Online /info"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Source-Code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Locales</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-searx.locales">
+<span id="locales"></span><span id="searx-locales"></span><h1>Locales<a class="headerlink" href="#module-searx.locales" title="Permalink to this heading">¶</a></h1>
+<p>Initialize <a class="reference internal" href="#searx.locales.LOCALE_NAMES" title="searx.locales.LOCALE_NAMES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOCALE_NAMES</span></code></a>, <a class="reference internal" href="#searx.locales.RTL_LOCALES" title="searx.locales.RTL_LOCALES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RTL_LOCALES</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="searx.locales.ADDITIONAL_TRANSLATIONS">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">ADDITIONAL_TRANSLATIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'dv':</span> <span class="pre">'ދިވެހި</span> <span class="pre">(Dhivehi)',</span> <span class="pre">'oc':</span> <span class="pre">'Occitan',</span> <span class="pre">'pap':</span> <span class="pre">'Papiamento',</span> <span class="pre">'szl':</span> <span class="pre">'Ślōnski</span> <span class="pre">(Silesian)'}</span></em><a class="headerlink" href="#searx.locales.ADDITIONAL_TRANSLATIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Additional languages SearXNG has translations for but not supported by
+python-babel (see <a class="reference internal" href="#searx.locales.locales_initialize" title="searx.locales.locales_initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">locales_initialize</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="searx.locales.LOCALE_BEST_MATCH">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">LOCALE_BEST_MATCH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'dv':</span> <span class="pre">'si',</span> <span class="pre">'nl-BE':</span> <span class="pre">'nl',</span> <span class="pre">'oc':</span> <span class="pre">'fr-FR',</span> <span class="pre">'pap':</span> <span class="pre">'pt-BR',</span> <span class="pre">'szl':</span> <span class="pre">'pl',</span> <span class="pre">'zh-HK':</span> <span class="pre">'zh-Hant-TW'}</span></em><a class="headerlink" href="#searx.locales.LOCALE_BEST_MATCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map a locale we do not have a translations for to a locale we have a
+translation for. By example: use Taiwan version of the translation for Hong
+Kong.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="searx.locales.LOCALE_NAMES">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">LOCALE_NAMES</span></span><a class="headerlink" href="#searx.locales.LOCALE_NAMES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping of locales and their description.  Locales e.g. ‘fr’ or ‘pt-BR’ (see
+<a class="reference internal" href="#searx.locales.locales_initialize" title="searx.locales.locales_initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">locales_initialize</span></code></a>).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="searx.locales.RTL_LOCALES">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">RTL_LOCALES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.11)"><span class="pre">Set</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ar',</span> <span class="pre">'fa-IR',</span> <span class="pre">'he'}</span></em><a class="headerlink" href="#searx.locales.RTL_LOCALES" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <em>Right-To-Left</em> locales e.g. ‘he’ or ‘fa-IR’ (see
+<a class="reference internal" href="#searx.locales.locales_initialize" title="searx.locales.locales_initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">locales_initialize</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.locales.get_engine_locale">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">get_engine_locale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">searxng_locale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_locales</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/locales.html#get_engine_locale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.locales.get_engine_locale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return engine’s language (aka locale) string that best fits to argument
+<code class="docutils literal notranslate"><span class="pre">searxng_locale</span></code>.</p>
+<p>Argument <code class="docutils literal notranslate"><span class="pre">engine_locales</span></code> is a python dict that maps <em>SearXNG locales</em> to
+corresponding <em>engine locales</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">engine</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1"># SearXNG string : engine-string</span>
+    <span class="s1">&#39;ca-ES&#39;</span>          <span class="p">:</span> <span class="s1">&#39;ca_ES&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;fr-BE&#39;</span>          <span class="p">:</span> <span class="s1">&#39;fr_BE&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;fr-CA&#39;</span>          <span class="p">:</span> <span class="s1">&#39;fr_CA&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;fr-CH&#39;</span>          <span class="p">:</span> <span class="s1">&#39;fr_CH&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;fr&#39;</span>             <span class="p">:</span> <span class="s1">&#39;fr_FR&#39;</span><span class="p">,</span>
+    <span class="o">...</span>
+    <span class="s1">&#39;pl-PL&#39;</span>          <span class="p">:</span> <span class="s1">&#39;pl_PL&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pt-PT&#39;</span>          <span class="p">:</span> <span class="s1">&#39;pt_PT&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The <em>SearXNG locale</em> string has to be known by babel!</p>
+</div>
+<p>If there is no direct 1:1 mapping, this functions tries to narrow down
+engine’s language (locale).  If no value can be determined by these
+approximation attempts the <code class="docutils literal notranslate"><span class="pre">default</span></code> value is returned.</p>
+<p>Assumptions:</p>
+<ol class="upperalpha simple">
+<li><p>When user select a language the results should be optimized according to
+the selected language.</p></li>
+<li><p>When user select a language and a territory the results should be
+optimized with first priority on terrirtory and second on language.</p></li>
+</ol>
+<p>First approximation rule (<em>by territory</em>):</p>
+<blockquote>
+<div><p>When the user selects a locale with terrirtory (and a language), the
+territory has priority over the language.  If any of the offical languages
+in the terrirtory is supported by the engine (<code class="docutils literal notranslate"><span class="pre">engine_locales</span></code>) it will
+be used.</p>
+</div></blockquote>
+<p>Second approximation rule (<em>by language</em>):</p>
+<blockquote>
+<div><p>If “First approximation rule” brings no result or the user selects only a
+language without a terrirtory.  Check in which territories the language
+has an offical status and if one of these territories is supported by the
+engine.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.locales.get_locale_descr">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">get_locale_descr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">locale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locale_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/locales.html#get_locale_descr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.locales.get_locale_descr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get locale name e.g. ‘Français - fr’ or ‘Português (Brasil) - pt-BR’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>locale</strong> – instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Locale</span></code></p></li>
+<li><p><strong>locale_name</strong> – name e.g. ‘fr’  or ‘pt_BR’ (delimiter is <em>underscore</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.locales.get_translations">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">get_translations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/locales.html#get_translations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.locales.get_translations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Monkey patch of <a class="reference external" href="https://python-babel.github.io/flask-babel/index.html#flask_babel.get_translations" title="(in Flask-Babel)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flask_babel.get_translations</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.locales.locales_initialize">
+<span class="sig-prename descclassname"><span class="pre">searx.locales.</span></span><span class="sig-name descname"><span class="pre">locales_initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/locales.html#locales_initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.locales.locales_initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize locales environment of the SearXNG session.</p>
+<ul class="simple">
+<li><p>monkey patch <a class="reference external" href="https://python-babel.github.io/flask-babel/index.html#flask_babel.get_translations" title="(in Flask-Babel)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flask_babel.get_translations</span></code></a> by <a class="reference internal" href="#searx.locales.get_translations" title="searx.locales.get_translations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_translations</span></code></a></p></li>
+<li><p>init global names <a class="reference internal" href="#searx.locales.LOCALE_NAMES" title="searx.locales.LOCALE_NAMES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOCALE_NAMES</span></code></a>, <a class="reference internal" href="#searx.locales.RTL_LOCALES" title="searx.locales.RTL_LOCALES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RTL_LOCALES</span></code></a></p></li>
+</ul>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../own-instance.html">Why use a private instance?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Source-Code</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="searx.babel_extract.html">Custom message extractor (i18n)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.html">Load Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.demo_offline.html">Demo Offline Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.demo_online.html">Demo Online Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.google.html">Google Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.tineye.html">Tineye</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.yahoo.html">Yahoo Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.infopage.html">Online <code class="docutils literal notranslate"><span class="pre">/info</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Locales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.plugins.limiter.html">Limiter Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.plugins.tor_check.html">Tor check plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.redislib.html">Redis Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.search.html">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.shared.redisdb.html">Redis DB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.utils.html">Utility functions for the engines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="../index.html">Overview</a>
+    <ul>
+      <li><a href="index.html">Source-Code</a>
+        <ul>
+          <li>Previous: <a href="searx.infopage.html" title="previous chapter">Online <code class="docutils literal notranslate"><span class="pre">/info</span></code></a>
+          <li>Next: <a href="searx.plugins.limiter.html" title="next chapter">Limiter Plugin</a></ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src/searx.locales.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

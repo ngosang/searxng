@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recoll Engine &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SQL Engines" href="sql-engines.html" />
+    <link rel="prev" title="Private Engines (tokens)" href="private-engines.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sql-engines.html" title="SQL Engines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="private-engines.html" title="Private Engines (tokens)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Administrator documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Engines &amp; Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Recoll Engine</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="recoll-engine">
+<span id="engine-recoll"></span><h1>Recoll Engine<a class="headerlink" href="#recoll-engine" title="Permalink to this heading">¶</a></h1>
+<aside class="sidebar">
+<p class="sidebar-title">info</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.lesbonscomptes.com/recoll/">Recoll</a></p></li>
+<li><p><a class="reference external" href="https://framagit.org/medoc92/recollwebui.git">recoll-webui</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ngosang/searxng/blob/master/searx/engines/recoll.py">git://searx/engines/recoll.py</a></p></li>
+</ul>
+</aside>
+<p><a class="reference external" href="https://www.lesbonscomptes.com/recoll/">Recoll</a> is a desktop full-text search tool based on Xapian.  By itself <a class="reference external" href="https://www.lesbonscomptes.com/recoll/">Recoll</a>
+does not offer WEB or API access, this can be achieved using <a class="reference external" href="https://framagit.org/medoc92/recollwebui.git">recoll-webui</a></p>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h2>
+<p>You must configure the following settings:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">base_url</span></code>:</dt><dd><p>Location where recoll-webui can be reached.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mount_prefix</span></code>:</dt><dd><p>Location where the file hierarchy is mounted on your <em>local</em> filesystem.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dl_prefix</span></code>:</dt><dd><p>Location where the file hierarchy as indexed by recoll can be reached.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">search_dir</span></code>:</dt><dd><p>Part of the indexed file hierarchy to be search, if empty the full domain is
+searched.</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<p>Scenario:</p>
+<ol class="arabic simple">
+<li><p>Recoll indexes a local filesystem mounted in <code class="docutils literal notranslate"><span class="pre">/export/documents/reference</span></code>,</p></li>
+<li><p>the Recoll search interface can be reached at <a class="reference external" href="https://recoll.example.org/">https://recoll.example.org/</a> and</p></li>
+<li><p>the contents of this filesystem can be reached though <a class="reference external" href="https://download.example.org/reference">https://download.example.org/reference</a></p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://recoll.example.org/</span><span class="w"></span>
+<span class="nt">mount_prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/export/documents</span><span class="w"></span>
+<span class="nt">dl_prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://download.example.org</span><span class="w"></span>
+<span class="nt">search_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../user/index.html">User information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../own-instance.html">Why use a private instance?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation-docker.html">Docker Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation-scripts.html">Installation Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation-searxng.html">Step by step installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation-uwsgi.html">uWSGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation-nginx.html">NGINX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation-apache.html">Apache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../update-searxng.html">SearXNG maintenance</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Engines &amp; Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Administration API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins.html">Plugins builtin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../buildhosts.html">Buildhosts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/index.html">Source-Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="../../index.html">Overview</a>
+    <ul>
+      <li><a href="../index.html">Administrator documentation</a>
+        <ul>
+      <li><a href="index.html">Engines &amp; Settings</a>
+        <ul>
+          <li>Previous: <a href="private-engines.html" title="previous chapter">Private Engines (<code class="docutils literal notranslate"><span class="pre">tokens</span></code>)</a>
+          <li>Next: <a href="sql-engines.html" title="next chapter">SQL Engines</a></ul>
+      </li></ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/admin/engines/recoll.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="../../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

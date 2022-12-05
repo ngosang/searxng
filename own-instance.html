@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Why use a private instance? &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Administrator documentation" href="admin/index.html" />
+    <link rel="prev" title="User information" href="user/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="admin/index.html" title="Administrator documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="user/index.html" title="User information"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Why use a private instance?</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="why-use-a-private-instance">
+<h1>Why use a private instance?<a class="headerlink" href="#why-use-a-private-instance" title="Permalink to this heading">¶</a></h1>
+<blockquote>
+<div><p><em>“Is it worth to run my own instance?”</em></p>
+</div></blockquote>
+<p>.. is a common question among SearXNG users.  Before answering this question,
+see what options a SearXNG user has.</p>
+<p>Public instances are open to everyone who has access to its URL.  Usually, these
+are operated by unknown parties (from the users’ point of view).  Private
+instances can be used by a select group of people.  It is for example a SearXNG of
+group of friends or a company which can be accessed through VPN.  Also it can be
+single user one which runs on the user’s laptop.</p>
+<p>To gain more insight on how these instances work let’s dive into how SearXNG
+protects its users.</p>
+<section id="how-does-searxng-protect-privacy">
+<h2>How does SearXNG protect privacy?<a class="headerlink" href="#how-does-searxng-protect-privacy" title="Permalink to this heading">¶</a></h2>
+<p>SearXNG protects the privacy of its users in multiple ways regardless of the type
+of the instance (private, public).  Removal of private data from search requests
+comes in three forms:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>removal of private data from requests going to search services</p></li>
+<li><p>not forwarding anything from a third party services through search services
+(e.g. advertisement)</p></li>
+<li><p>removal of private data from requests going to the result pages</p></li>
+</ol>
+</div></blockquote>
+<p>Removing private data means not sending cookies to external search engines and
+generating a random browser profile for every request.  Thus, it does not matter
+if a public or private instance handles the request, because it is anonymized in
+both cases.  IP addresses will be the IP of the instance.  But SearXNG can be
+configured to use proxy or Tor.  <a class="reference external" href="https://github.com/asciimoo/morty">Result proxy</a> is supported, too.</p>
+<p>SearXNG does not serve ads or tracking content unlike most search services.  So
+private data is not forwarded to third parties who might monetize it.  Besides
+protecting users from search services, both referring page and search query are
+hidden from visited result pages.</p>
+<section id="what-are-the-consequences-of-using-public-instances">
+<h3>What are the consequences of using public instances?<a class="headerlink" href="#what-are-the-consequences-of-using-public-instances" title="Permalink to this heading">¶</a></h3>
+<p>If someone uses a public instance, they have to trust the administrator of that
+instance.  This means that the user of the public instance does not know whether
+their requests are logged, aggregated and sent or sold to a third party.</p>
+<p>Also, public instances without proper protection are more vulnerable to abusing
+the search service, In this case the external service in exchange returns
+CAPTCHAs or bans the IP of the instance.  Thus, search requests return less
+results.</p>
+</section>
+<section id="i-see-what-about-private-instances">
+<h3>I see. What about private instances?<a class="headerlink" href="#i-see-what-about-private-instances" title="Permalink to this heading">¶</a></h3>
+<p>If users run their <a class="reference internal" href="admin/installation.html#installation"><span class="std std-ref">own instances</span></a>, everything is in their
+control: the source code, logging settings and private data.  Unknown instance
+administrators do not have to be trusted.</p>
+<p>Furthermore, as the default settings of their instance is editable, there is no
+need to use cookies to tailor SearXNG to their needs.  So preferences will not be
+reset to defaults when clearing browser cookies.  As settings are stored on
+their computer, it will not be accessible to others as long as their computer is
+not compromised.</p>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">¶</a></h2>
+<p>Always use an instance which is operated by people you trust.  The privacy
+features of SearXNG are available to users no matter what kind of instance they
+use.</p>
+<p>If someone is on the go or just wants to try SearXNG for the first time public
+instances are the best choices.  Additionally, public instance are making a
+world a better place, because those who cannot or do not want to run an
+instance, have access to a privacy respecting search service.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user/index.html">User information</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Why use a private instance?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-does-searxng-protect-privacy">How does SearXNG protect privacy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/index.html">Source-Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Overview</a>
+    <ul>
+          <li>Previous: <a href="user/index.html" title="previous chapter">User information</a>
+          <li>Next: <a href="admin/index.html" title="next chapter">Administrator documentation</a>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/own-instance.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

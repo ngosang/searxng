@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>searxng_extra.update.update_languages &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/tabs.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">searxng_extra.update.update_languages</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for searxng_extra.update.update_languages</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># lint: pylint</span>
+
+<span class="c1"># SPDX-License-Identifier: AGPL-3.0-or-later</span>
+<span class="sd">&quot;&quot;&quot;This script generates languages.py from intersecting each engine&#39;s supported</span>
+<span class="sd">languages.</span>
+
+<span class="sd">Output files: :origin:`searx/data/engines_languages.json` and</span>
+<span class="sd">:origin:`searx/languages.py` (:origin:`CI Update data ...</span>
+<span class="sd">&lt;.github/workflows/data-update.yml&gt;`).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># pylint: disable=invalid-name</span>
+<span class="kn">from</span> <span class="nn">unicodedata</span> <span class="kn">import</span> <span class="n">lookup</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
+<span class="kn">from</span> <span class="nn">babel</span> <span class="kn">import</span> <span class="n">Locale</span><span class="p">,</span> <span class="n">UnknownLocaleError</span>
+<span class="kn">from</span> <span class="nn">babel.languages</span> <span class="kn">import</span> <span class="n">get_global</span>
+<span class="kn">from</span> <span class="nn">babel.core</span> <span class="kn">import</span> <span class="n">parse_locale</span>
+
+<span class="kn">from</span> <span class="nn">searx</span> <span class="kn">import</span> <span class="n">settings</span><span class="p">,</span> <span class="n">searx_dir</span>
+<span class="kn">from</span> <span class="nn">searx.engines</span> <span class="kn">import</span> <span class="n">load_engines</span><span class="p">,</span> <span class="n">engines</span>
+<span class="kn">from</span> <span class="nn">searx.network</span> <span class="kn">import</span> <span class="n">set_timeout_for_thread</span>
+
+<span class="c1"># Output files.</span>
+<span class="n">engines_languages_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">searx_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;data&#39;</span> <span class="o">/</span> <span class="s1">&#39;engines_languages.json&#39;</span>
+<span class="n">languages_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">searx_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;languages.py&#39;</span>
+
+
+<span class="c1"># Fetches supported languages for each engine and writes json file with those.</span>
+<span class="k">def</span> <span class="nf">fetch_supported_languages</span><span class="p">():</span>
+    <span class="n">set_timeout_for_thread</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>
+
+    <span class="n">engines_languages</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">engines</span><span class="p">)</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">engine_name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">],</span> <span class="s1">&#39;fetch_supported_languages&#39;</span><span class="p">):</span>
+            <span class="n">engines_languages</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span><span class="o">.</span><span class="n">fetch_supported_languages</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fetched </span><span class="si">%s</span><span class="s2"> languages from engine </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">engines_languages</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]),</span> <span class="n">engine_name</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">engines_languages</span><span class="p">[</span><span class="n">engine_name</span><span class="p">])</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>  <span class="c1"># pylint: disable=unidiomatic-typecheck</span>
+                <span class="n">engines_languages</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">engines_languages</span><span class="p">[</span><span class="n">engine_name</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fetched languages from </span><span class="si">%s</span><span class="s2"> engines&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">engines_languages</span><span class="p">))</span>
+
+    <span class="c1"># write json file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">engines_languages_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">engines_languages</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">engines_languages</span>
+
+
+<span class="c1"># Get babel Locale object from lang_code if possible.</span>
+<span class="k">def</span> <span class="nf">get_locale</span><span class="p">(</span><span class="n">lang_code</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">locale</span> <span class="o">=</span> <span class="n">Locale</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">lang_code</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">locale</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">UnknownLocaleError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="n">lang2emoji</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ha&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\U0001F1F3\U0001F1EA</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Hausa / Niger</span>
+    <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\U0001F1E7\U0001F1E6</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Bosnian / Bosnia &amp; Herzegovina</span>
+    <span class="s1">&#39;jp&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\U0001F1EF\U0001F1F5</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Japanese</span>
+    <span class="s1">&#39;ua&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\U0001F1FA\U0001F1E6</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Ukrainian</span>
+    <span class="s1">&#39;he&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\U0001F1EE\U0001F1F7</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Hebrew</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_unicode_flag"><a class="viewcode-back" href="../../../dev/searxng_extra/update.html#searxng_extra.update.update_languages.get_unicode_flag">[docs]</a><span class="k">def</span> <span class="nf">get_unicode_flag</span><span class="p">(</span><span class="n">lang_code</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine a unicode flag (emoji) that fits to the ``lang_code``&quot;&quot;&quot;</span>
+
+    <span class="n">emoji</span> <span class="o">=</span> <span class="n">lang2emoji</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lang_code</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">emoji</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">emoji</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lang_code</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\U0001F310</span><span class="s1">&#39;</span>
+
+    <span class="n">language</span> <span class="o">=</span> <span class="n">territory</span> <span class="o">=</span> <span class="n">script</span> <span class="o">=</span> <span class="n">variant</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">language</span><span class="p">,</span> <span class="n">territory</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">variant</span> <span class="o">=</span> <span class="n">parse_locale</span><span class="p">(</span><span class="n">lang_code</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+
+    <span class="c1"># https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">territory</span><span class="p">:</span>
+        <span class="c1"># https://www.unicode.org/emoji/charts/emoji-list.html#country-flag</span>
+        <span class="n">emoji</span> <span class="o">=</span> <span class="n">lang2emoji</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">emoji</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> --&gt; language: </span><span class="si">%s</span><span class="s2"> / territory: </span><span class="si">%s</span><span class="s2"> / script: </span><span class="si">%s</span><span class="s2"> / variant: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">lang_code</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">territory</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">variant</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">emoji</span>
+
+    <span class="n">emoji</span> <span class="o">=</span> <span class="n">lang2emoji</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">territory</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">emoji</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">emoji</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="s1">&#39;REGIONAL INDICATOR SYMBOL LETTER &#39;</span> <span class="o">+</span> <span class="n">territory</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="s1">&#39;REGIONAL INDICATOR SYMBOL LETTER &#39;</span> <span class="o">+</span> <span class="n">territory</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># print(&quot;%s --&gt; territory: %s --&gt; %s%s&quot; %(lang_code, territory, c1, c2 ))</span>
+    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> --&gt; territory: </span><span class="si">%s</span><span class="s2"> --&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lang_code</span><span class="p">,</span> <span class="n">territory</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">c2</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_territory_name</span><span class="p">(</span><span class="n">lang_code</span><span class="p">):</span>
+    <span class="n">country_name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">locale</span> <span class="o">=</span> <span class="n">get_locale</span><span class="p">(</span><span class="n">lang_code</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">locale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">country_name</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">get_territory_name</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: </span><span class="si">%s</span><span class="s2"> --&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">locale</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">country_name</span>
+
+
+<span class="c1"># Join all language lists.</span>
+<span class="k">def</span> <span class="nf">join_language_lists</span><span class="p">(</span><span class="n">engines_languages</span><span class="p">):</span>
+    <span class="n">language_list</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">engine_name</span> <span class="ow">in</span> <span class="n">engines_languages</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">lang_code</span> <span class="ow">in</span> <span class="n">engines_languages</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]:</span>
+
+            <span class="c1"># apply custom fixes if necessary</span>
+            <span class="k">if</span> <span class="n">lang_code</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">],</span> <span class="s1">&#39;language_aliases&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">lang_code</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+                    <span class="n">lc</span> <span class="k">for</span> <span class="n">lc</span><span class="p">,</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span><span class="o">.</span><span class="n">language_aliases</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">lang_code</span> <span class="o">==</span> <span class="n">alias</span>
+                <span class="p">)</span>
+
+            <span class="n">locale</span> <span class="o">=</span> <span class="n">get_locale</span><span class="p">(</span><span class="n">lang_code</span><span class="p">)</span>
+
+            <span class="c1"># ensure that lang_code uses standard language and country codes</span>
+            <span class="k">if</span> <span class="n">locale</span> <span class="ow">and</span> <span class="n">locale</span><span class="o">.</span><span class="n">territory</span><span class="p">:</span>
+                <span class="n">lang_code</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{lang}</span><span class="s2">-</span><span class="si">{country}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="n">locale</span><span class="o">.</span><span class="n">language</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="n">locale</span><span class="o">.</span><span class="n">territory</span><span class="p">)</span>
+            <span class="n">short_code</span> <span class="o">=</span> <span class="n">lang_code</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># add language without country if not in list</span>
+            <span class="k">if</span> <span class="n">short_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">language_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">locale</span><span class="p">:</span>
+                    <span class="c1"># get language&#39;s data from babel&#39;s Locale object</span>
+                    <span class="n">language_name</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">get_language_name</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                    <span class="n">english_name</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">english_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; (&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">short_code</span> <span class="ow">in</span> <span class="n">engines_languages</span><span class="p">[</span><span class="s1">&#39;wikipedia&#39;</span><span class="p">]:</span>
+                    <span class="c1"># get language&#39;s data from wikipedia if not known by babel</span>
+                    <span class="n">language_name</span> <span class="o">=</span> <span class="n">engines_languages</span><span class="p">[</span><span class="s1">&#39;wikipedia&#39;</span><span class="p">][</span><span class="n">short_code</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                    <span class="n">english_name</span> <span class="o">=</span> <span class="n">engines_languages</span><span class="p">[</span><span class="s1">&#39;wikipedia&#39;</span><span class="p">][</span><span class="n">short_code</span><span class="p">][</span><span class="s1">&#39;english_name&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">language_name</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">english_name</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="c1"># add language to list</span>
+                <span class="n">language_list</span><span class="p">[</span><span class="n">short_code</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">language_name</span><span class="p">,</span>
+                    <span class="s1">&#39;english_name&#39;</span><span class="p">:</span> <span class="n">english_name</span><span class="p">,</span>
+                    <span class="s1">&#39;counter&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span>
+                    <span class="s1">&#39;countries&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="p">}</span>
+
+            <span class="c1"># add language with country if not in list</span>
+            <span class="k">if</span> <span class="n">lang_code</span> <span class="o">!=</span> <span class="n">short_code</span> <span class="ow">and</span> <span class="n">lang_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">language_list</span><span class="p">[</span><span class="n">short_code</span><span class="p">][</span><span class="s1">&#39;countries&#39;</span><span class="p">]:</span>
+                <span class="n">country_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">if</span> <span class="n">locale</span><span class="p">:</span>
+                    <span class="c1"># get country name from babel&#39;s Locale object</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">country_name</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">get_territory_name</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: </span><span class="si">%s</span><span class="s2"> --&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">locale</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
+                        <span class="n">locale</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="n">language_list</span><span class="p">[</span><span class="n">short_code</span><span class="p">][</span><span class="s1">&#39;countries&#39;</span><span class="p">][</span><span class="n">lang_code</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;country_name&#39;</span><span class="p">:</span> <span class="n">country_name</span><span class="p">,</span>
+                    <span class="s1">&#39;counter&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span>
+                <span class="p">}</span>
+
+            <span class="c1"># count engine for both language_country combination and language alone</span>
+            <span class="n">language_list</span><span class="p">[</span><span class="n">short_code</span><span class="p">][</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">engine_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lang_code</span> <span class="o">!=</span> <span class="n">short_code</span><span class="p">:</span>
+                <span class="n">language_list</span><span class="p">[</span><span class="n">short_code</span><span class="p">][</span><span class="s1">&#39;countries&#39;</span><span class="p">][</span><span class="n">lang_code</span><span class="p">][</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">engine_name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">language_list</span>
+
+
+<span class="c1"># Filter language list so it only includes the most supported languages and countries</span>
+<span class="k">def</span> <span class="nf">filter_language_list</span><span class="p">(</span><span class="n">all_languages</span><span class="p">):</span>
+    <span class="n">min_engines_per_lang</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">min_engines_per_country</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="c1"># pylint: disable=consider-using-dict-items, consider-iterating-dictionary</span>
+    <span class="n">main_engines</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">engine_name</span>
+        <span class="k">for</span> <span class="n">engine_name</span> <span class="ow">in</span> <span class="n">engines</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;general&#39;</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span><span class="o">.</span><span class="n">categories</span>
+        <span class="ow">and</span> <span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span><span class="o">.</span><span class="n">supported_languages</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="n">engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span><span class="o">.</span><span class="n">disabled</span>
+    <span class="p">]</span>
+
+    <span class="c1"># filter list to include only languages supported by most engines or all default general engines</span>
+    <span class="n">filtered_languages</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">code</span><span class="p">:</span> <span class="n">lang</span>
+        <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">lang</span> <span class="ow">in</span> <span class="n">all_languages</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">lang</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">min_engines_per_lang</span>
+            <span class="ow">or</span> <span class="nb">all</span><span class="p">(</span><span class="n">main_engine</span> <span class="ow">in</span> <span class="n">lang</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">main_engine</span> <span class="ow">in</span> <span class="n">main_engines</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_copy_lang_data</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">country_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">new_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">new_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_languages</span><span class="p">[</span><span class="n">lang</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">new_dict</span><span class="p">[</span><span class="s1">&#39;english_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_languages</span><span class="p">[</span><span class="n">lang</span><span class="p">][</span><span class="s1">&#39;english_name&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">country_name</span><span class="p">:</span>
+            <span class="n">new_dict</span><span class="p">[</span><span class="s1">&#39;country_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">country_name</span>
+        <span class="k">return</span> <span class="n">new_dict</span>
+
+    <span class="c1"># for each language get country codes supported by most engines or at least one country code</span>
+    <span class="n">filtered_languages_with_countries</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">lang</span><span class="p">,</span> <span class="n">lang_data</span> <span class="ow">in</span> <span class="n">filtered_languages</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">countries</span> <span class="o">=</span> <span class="n">lang_data</span><span class="p">[</span><span class="s1">&#39;countries&#39;</span><span class="p">]</span>
+        <span class="n">filtered_countries</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># get language&#39;s country codes with enough supported engines</span>
+        <span class="k">for</span> <span class="n">lang_country</span><span class="p">,</span> <span class="n">country_data</span> <span class="ow">in</span> <span class="n">countries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">country_data</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">min_engines_per_country</span><span class="p">:</span>
+                <span class="n">filtered_countries</span><span class="p">[</span><span class="n">lang_country</span><span class="p">]</span> <span class="o">=</span> <span class="n">_copy_lang_data</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">country_data</span><span class="p">[</span><span class="s1">&#39;country_name&#39;</span><span class="p">])</span>
+
+        <span class="c1"># add language without countries too if there&#39;s more than one country to choose from</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_countries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">filtered_countries</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span> <span class="o">=</span> <span class="n">_copy_lang_data</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_countries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">lang_country</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">filtered_countries</span><span class="p">))</span>
+
+        <span class="c1"># if no country has enough engines try to get most likely country code from babel</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filtered_countries</span><span class="p">:</span>
+            <span class="n">lang_country</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">subtags</span> <span class="o">=</span> <span class="n">get_global</span><span class="p">(</span><span class="s1">&#39;likely_subtags&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">subtags</span><span class="p">:</span>
+                <span class="n">country_code</span> <span class="o">=</span> <span class="n">subtags</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">country_code</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">lang_country</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{lang}</span><span class="s2">-</span><span class="si">{country}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="n">country_code</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">lang_country</span><span class="p">:</span>
+                <span class="n">filtered_countries</span><span class="p">[</span><span class="n">lang_country</span><span class="p">]</span> <span class="o">=</span> <span class="n">_copy_lang_data</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">filtered_countries</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span> <span class="o">=</span> <span class="n">_copy_lang_data</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">filtered_languages_with_countries</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">filtered_countries</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filtered_languages_with_countries</span>
+
+
+<div class="viewcode-block" id="UnicodeEscape"><a class="viewcode-back" href="../../../dev/searxng_extra/update.html#searxng_extra.update.update_languages.UnicodeEscape">[docs]</a><span class="k">class</span> <span class="nc">UnicodeEscape</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Escape unicode string in :py:obj:`pprint.pformat`&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;unicode-escape&#39;</span><span class="p">)])</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span></div>
+
+
+<span class="c1"># Write languages.py.</span>
+<span class="k">def</span> <span class="nf">write_languages_file</span><span class="p">(</span><span class="n">languages</span><span class="p">):</span>
+    <span class="n">file_headers</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;# -*- coding: utf-8 -*-&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;# list of language codes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;# this file is generated automatically by utils/fetch_languages.py&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;language_codes = (</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">language_codes</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">languages</span><span class="p">):</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">languages</span><span class="p">[</span><span class="n">code</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: languages[&#39;</span><span class="si">%s</span><span class="s2">&#39;] --&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">languages</span><span class="p">[</span><span class="n">code</span><span class="p">]))</span>
+            <span class="k">continue</span>
+
+        <span class="n">flag</span> <span class="o">=</span> <span class="n">get_unicode_flag</span><span class="p">(</span><span class="n">code</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">code</span><span class="p">,</span>
+            <span class="n">languages</span><span class="p">[</span><span class="n">code</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; (&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">get_territory_name</span><span class="p">(</span><span class="n">code</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">languages</span><span class="p">[</span><span class="n">code</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;english_name&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">UnicodeEscape</span><span class="p">(</span><span class="n">flag</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">language_codes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="n">language_codes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">language_codes</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">languages_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">new_file</span><span class="p">:</span>
+        <span class="n">file_content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{file_headers}</span><span class="s2"> </span><span class="si">{language_codes}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="c1"># fmt: off</span>
+            <span class="n">file_headers</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_headers</span><span class="p">),</span>
+            <span class="n">language_codes</span> <span class="o">=</span> <span class="n">pformat</span><span class="p">(</span><span class="n">language_codes</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># fmt: on</span>
+        <span class="p">)</span>
+        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+        <span class="n">new_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">load_engines</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;engines&#39;</span><span class="p">])</span>
+    <span class="n">_engines_languages</span> <span class="o">=</span> <span class="n">fetch_supported_languages</span><span class="p">()</span>
+    <span class="n">_all_languages</span> <span class="o">=</span> <span class="n">join_language_lists</span><span class="p">(</span><span class="n">_engines_languages</span><span class="p">)</span>
+    <span class="n">_filtered_languages</span> <span class="o">=</span> <span class="n">filter_language_list</span><span class="p">(</span><span class="n">_all_languages</span><span class="p">)</span>
+    <span class="n">write_languages_file</span><span class="p">(</span><span class="n">_filtered_languages</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/index.html">User information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../own-instance.html">Why use a private instance?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../src/index.html">Source-Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="../../../index.html">Overview</a>
+    <ul>
+      <li><a href="../../index.html">Module code</a>
+        
+          
+          </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="../../../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

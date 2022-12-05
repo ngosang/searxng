@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Development Quickstart &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to contribute" href="contribution_guide.html" />
+    <link rel="prev" title="Developer documentation" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contribution_guide.html" title="How to contribute"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Developer documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Developer documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Development Quickstart</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="development-quickstart">
+<span id="devquickstart"></span><h1>Development Quickstart<a class="headerlink" href="#development-quickstart" title="Permalink to this heading">¶</a></h1>
+<p>SearXNG loves developers, just clone and start hacking.  All the rest is done for
+you simply by using <a class="reference internal" href="makefile.html#makefile"><span class="std std-ref">make</span></a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/searxng/searxng.git searxng
+</pre></div>
+</div>
+<p>Here is how a minimal workflow looks like:</p>
+<ol class="arabic simple">
+<li><p><em>start</em> hacking</p></li>
+<li><p><em>run</em> your code: <a class="reference internal" href="makefile.html#make-run"><span class="std std-ref">make run</span></a></p></li>
+<li><p><em>test</em> your code: <a class="reference internal" href="makefile.html#make-test"><span class="std std-ref">make test</span></a></p></li>
+</ol>
+<p>If you think at some point something fails, go back to <em>start</em>.  Otherwise,
+choose a meaningful commit message and we are happy to receive your pull
+request. To not end in <em>wild west</em> we have some directives, please pay attention
+to our “<a class="reference internal" href="contribution_guide.html#how-to-contribute"><span class="std std-ref">How to contribute</span></a>” guideline.</p>
+<p>If you implement themes, you will need to setup a <a class="reference internal" href="makefile.html#make-node-env"><span class="std std-ref">Node.js environment (make node.env)</span></a> once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make node.env
+</pre></div>
+</div>
+<p>Before you call <em>make run</em> (2.), you need to compile the modified styles and
+JavaScript:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make themes.all
+</pre></div>
+</div>
+<p>Alternatively you can also compile selective the theme you have modified,
+e.g. the <em>simple</em> theme.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make themes.simple
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To get live builds while modifying CSS &amp; JS use: <code class="docutils literal notranslate"><span class="pre">LIVE_THEME=simple</span> <span class="pre">make</span> <span class="pre">run</span></code></p>
+</div>
+<p>If you finished your <em>tests</em> you can start to commit your changes.  To separate
+the modified source code from the build products first run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make static.build.restore
+</pre></div>
+</div>
+<p>This will restore the old build products and only your changes of the code
+remain in the working tree which can now be added &amp; commited.  When all sources
+are commited, you can commit the build products simply by:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make static.build.commit
+</pre></div>
+</div>
+<p>Commiting the build products should be the last step, just before you send us
+your PR.  There is also a make target to rewind this last build commit:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make static.build.drop
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../own-instance.html">Why use a private instance?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Development Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contribution_guide.html">How to contribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engine_overview.html">Engine Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="offline_engines.html">Offline Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_api.html">Search API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="translation.html">Translation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lxcdev.html">Developing in Linux Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="makefile.html">Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reST.html">reST primer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searxng_extra/index.html">Tooling box <code class="docutils literal notranslate"><span class="pre">searxng_extra</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src/index.html">Source-Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="../index.html">Overview</a>
+    <ul>
+      <li><a href="index.html">Developer documentation</a>
+        <ul>
+          <li>Previous: <a href="index.html" title="previous chapter">Developer documentation</a>
+          <li>Next: <a href="contribution_guide.html" title="next chapter">How to contribute</a></ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/dev/quickstart.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

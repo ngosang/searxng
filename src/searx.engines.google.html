@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Google Engines &#8212; SearXNG Documentation (2022.12.05-67eea86b)</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/searxng.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tineye" href="searx.engines.tineye.html" />
+    <link rel="prev" title="Demo Online Engine" href="searx.engines.demo_online.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="searx.engines.tineye.html" title="Tineye"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="searx.engines.demo_online.html" title="Demo Online Engine"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">SearXNG Documentation (2022.12.05-67eea86b)</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Source-Code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Google Engines</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="google-engines">
+<span id="id1"></span><h1>Google Engines<a class="headerlink" href="#google-engines" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#google-api" id="id3">google API</a></p></li>
+<li><p><a class="reference internal" href="#module-searx.engines.google" id="id4">Google WEB</a></p></li>
+<li><p><a class="reference internal" href="#module-searx.engines.google_images" id="id5">Google Images</a></p></li>
+<li><p><a class="reference internal" href="#module-searx.engines.google_videos" id="id6">Google Videos</a></p></li>
+<li><p><a class="reference internal" href="#module-searx.engines.google_news" id="id7">Google News</a></p></li>
+</ul>
+</nav>
+<section id="google-api">
+<span id="id2"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">google API</a><a class="headerlink" href="#google-api" title="Permalink to this heading">¶</a></h2>
+<p>For detailed description of the <em>REST-full</em> API see: <a class="reference external" href="https://developers.google.com/custom-search/docs/xml_results#WebSearch_Query_Parameter_Definitions">Query Parameter
+Definitions</a>.  Not all parameters can be appied and some engines are <em>special</em>
+(e.g. <a class="reference internal" href="#google-news-engine"><span class="std std-ref">Google News</span></a>).</p>
+</section>
+<section id="module-searx.engines.google">
+<span id="google-web"></span><span id="google-web-engine"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Google WEB</a><a class="headerlink" href="#module-searx.engines.google" title="Permalink to this heading">¶</a></h2>
+<p>This is the implementation of the google WEB engine.  Some of this
+implementations are shared by other engines:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#google-images-engine"><span class="std std-ref">Google Images</span></a></p></li>
+<li><p><a class="reference internal" href="#google-news-engine"><span class="std std-ref">Google News</span></a></p></li>
+<li><p><a class="reference internal" href="#google-videos-engine"><span class="std std-ref">Google Videos</span></a></p></li>
+</ul>
+<p>The google WEB engine itself has a special setup option:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">google</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">  </span><span class="nt">use_mobile_ui</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">use_mobile_ui</span></code>: (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>)</dt><dd><p>Enables to use <em>mobile endpoint</em> to bypass the google blocking (see
+<a class="reference external" href="https://github.com/searxng/searxng/issues/159">#159</a>).  On the mobile UI of Google Search, the button <span class="guilabel">More
+results</span> is not affected by Google rate limiting and we can still do requests
+while actively blocked by the original Google search.  By activate
+<code class="docutils literal notranslate"><span class="pre">use_mobile_ui</span></code> this behavior is simulated by adding the parameter
+<code class="docutils literal notranslate"><span class="pre">async=use_ac:true,_fmt:pc</span></code> to the <a class="reference internal" href="#searx.engines.google.request" title="searx.engines.google.request"><code class="xref py py-func docutils literal notranslate"><span class="pre">request()</span></code></a>.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google.get_lang_info">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google.</span></span><span class="sig-name descname"><span class="pre">get_lang_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_aliases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supported_any_language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google.html#get_lang_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google.get_lang_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Composing various language properties for the google engines.</p>
+<p>This function is called by the various google engines (<a class="reference internal" href="#google-web-engine"><span class="std std-ref">Google WEB</span></a>, <a class="reference internal" href="#google-images-engine"><span class="std std-ref">Google Images</span></a>, <a class="reference internal" href="#google-news-engine"><span class="std std-ref">Google News</span></a> and
+<a class="reference internal" href="#google-videos-engine"><span class="std std-ref">Google Videos</span></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – request parameters of the engine</p></li>
+<li><p><strong>lang_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – list of supported languages of the engine
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">ENGINES_LANGUAGES[engine-name]</span></code></p></li>
+<li><p><strong>lang_list</strong> – custom aliases for non standard language codes
+(used when calling <a class="reference internal" href="searx.utils.html#searx.utils.match_language" title="searx.utils.match_language"><code class="xref py py-func docutils literal notranslate"><span class="pre">searx.utils.match_language()</span></code></a>)</p></li>
+<li><p><strong>supported_any_language</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – When a language is not specified, the
+language interpretation is left up to Google to decide how the search
+results should be delivered.  This argument is <code class="docutils literal notranslate"><span class="pre">True</span></code> for the google
+engine and <code class="docutils literal notranslate"><span class="pre">False</span></code> for the other engines (google-images, -news,
+-scholar, -videos).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>Py-Dictionary with the key/value pairs:</p>
+<dl class="simple">
+<dt>language:</dt><dd><p>Return value from <a class="reference internal" href="searx.utils.html#searx.utils.match_language" title="searx.utils.match_language"><code class="xref py py-func docutils literal notranslate"><span class="pre">searx.utils.match_language()</span></code></a></p>
+</dd>
+<dt>country:</dt><dd><p>The country code (e.g. US, AT, CA, FR, DE ..)</p>
+</dd>
+<dt>subdomain:</dt><dd><p>Google subdomain <code class="xref py py-obj docutils literal notranslate"><span class="pre">google_domains</span></code> that fits to the country
+code.</p>
+</dd>
+<dt>params:</dt><dd><p>Py-Dictionary with additional request arguments (can be passed to
+<a class="reference external" href="https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">urllib.parse.urlencode()</span></code></a>).</p>
+</dd>
+<dt>headers:</dt><dd><p>Py-Dictionary with additional HTTP headers (can be passed to
+request’s headers)</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google.request">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google.</span></span><span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google.html#request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Google search request</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google.response">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google.</span></span><span class="sig-name descname"><span class="pre">response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google.html#response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get response from google’s search request</p>
+</dd></dl>
+
+</section>
+<section id="module-searx.engines.google_images">
+<span id="google-images"></span><span id="google-images-engine"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">Google Images</a><a class="headerlink" href="#module-searx.engines.google_images" title="Permalink to this heading">¶</a></h2>
+<p>This is the implementation of the google images engine using the google
+internal API used the Google Go Android app.</p>
+<p>This internal API offer results in</p>
+<ul class="simple">
+<li><p>JSON (_fmt:json)</p></li>
+<li><p>Protobuf (_fmt:pb)</p></li>
+<li><p>Protobuf compressed? (_fmt:pc)</p></li>
+<li><p>HTML (_fmt:html)</p></li>
+<li><p>Protobuf encoded in JSON (_fmt:jspb).</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_images.request">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_images.</span></span><span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_images.html#request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_images.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Google-Image search request</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_images.response">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_images.</span></span><span class="sig-name descname"><span class="pre">response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_images.html#response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_images.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get response from google’s search request</p>
+</dd></dl>
+
+</section>
+<section id="module-searx.engines.google_videos">
+<span id="google-videos"></span><span id="google-videos-engine"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Google Videos</a><a class="headerlink" href="#module-searx.engines.google_videos" title="Permalink to this heading">¶</a></h2>
+<p>This is the implementation of the google videos engine.</p>
+<div class="admonition-content-security-policy-csp admonition">
+<p class="admonition-title">Content-Security-Policy (CSP)</p>
+<p>This engine needs to allow images from the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">data URLs</a> (prefixed with the
+<code class="docutils literal notranslate"><span class="pre">data:</span></code> scheme):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Header</span> <span class="nb">set</span> <span class="n">Content</span><span class="o">-</span><span class="n">Security</span><span class="o">-</span><span class="n">Policy</span> <span class="s2">&quot;img-src &#39;self&#39; data: ;&quot;</span>
+</pre></div>
+</div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_videos.request">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_videos.</span></span><span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_videos.html#request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_videos.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Google-Video search request</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_videos.response">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_videos.</span></span><span class="sig-name descname"><span class="pre">response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_videos.html#response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_videos.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get response from google’s search request</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_videos.scrap_out_thumbs">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_videos.</span></span><span class="sig-name descname"><span class="pre">scrap_out_thumbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_videos.html#scrap_out_thumbs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_videos.scrap_out_thumbs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrap out thumbnail data from &lt;script&gt; tags.</p>
+</dd></dl>
+
+</section>
+<section id="module-searx.engines.google_news">
+<span id="google-news"></span><span id="google-news-engine"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Google News</a><a class="headerlink" href="#module-searx.engines.google_news" title="Permalink to this heading">¶</a></h2>
+<p>This is the implementation of the google news engine.  The google news API
+ignores some parameters from the common <a class="reference internal" href="#google-api"><span class="std std-ref">google API</span></a>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://developers.google.com/custom-search/docs/xml_results#numsp">num</a> : the number of search results is ignored</p></li>
+<li><p><a class="reference external" href="https://developers.google.com/custom-search/docs/xml_results#safesp">save</a> : is ignored / Google-News results are always <em>SafeSearch</em></p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_news.request">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_news.</span></span><span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_news.html#request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_news.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Google-News search request</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="searx.engines.google_news.response">
+<span class="sig-prename descclassname"><span class="pre">searx.engines.google_news.</span></span><span class="sig-name descname"><span class="pre">response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/searx/engines/google_news.html#response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#searx.engines.google_news.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get response from google’s search request</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/searxng-wordmark.svg" alt="Logo"/>
+            </a></p>
+  
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../own-instance.html">Why use a private instance?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html">DevOps tooling box</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Source-Code</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="searx.babel_extract.html">Custom message extractor (i18n)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.html">Load Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.demo_offline.html">Demo Offline Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.demo_online.html">Demo Online Engine</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Google Engines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.tineye.html">Tineye</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.engines.yahoo.html">Yahoo Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.infopage.html">Online <code class="docutils literal notranslate"><span class="pre">/info</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.locales.html">Locales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.plugins.limiter.html">Limiter Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.plugins.tor_check.html">Tor check plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.redislib.html">Redis Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.search.html">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.shared.redisdb.html">Redis DB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searx.utils.html">Utility functions for the engines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../donate.html">Donate to searxng.org</a></li>
+</ul>
+
+  <h3>Project Links</h3>
+  <ul>
+    <li><a href="https://github.com/ngosang/searxng/tree/master">Source</a>
+  
+    <li><a href="https://github.com/searxng/searxng/wiki">Wiki</a>
+  
+    <li><a href="https://searx.space">Public instances</a>
+  
+    <li><a href="https://github.com/searxng/searxng/issues">Issue Tracker</a>
+  </ul><h3>Navigation</h3>
+<ul>
+  <li><a href="../index.html">Overview</a>
+    <ul>
+      <li><a href="index.html">Source-Code</a>
+        <ul>
+          <li>Previous: <a href="searx.engines.demo_online.html" title="previous chapter">Demo Online Engine</a>
+          <li>Next: <a href="searx.engines.tineye.html" title="next chapter">Tineye</a></ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src/searx.engines.google.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021 SearXNG team, 2015-2021 Adam Tauber, Noémi Ványi.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  <script src="../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>
